@@ -1,0 +1,339 @@
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local CoreGui = game:GetService("CoreGui")
+local Lighting = game:GetService("Lighting")
+local VirtualUser = game:GetService("VirtualUser")
+local player = Players.LocalPlayer
+
+
+spawn(function()
+    while task.wait(3) do
+        pcall(function()
+            for _, v in pairs(Lighting:GetChildren()) do
+                if v:IsA("BlurEffect") or v:IsA("ColorCorrectionEffect") then
+                    v:Destroy()
+                end
+            end
+            if CoreGui:FindFirstChild("RobloxPromptGui") then
+                CoreGui.RobloxPromptGui:Destroy()
+            end
+        end)
+    end
+end)
+
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "CrazyHub"
+gui.ResetOnSpawn = false
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+gui.DisplayOrder = 999999
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 380, 0, 560)
+frame.Position = UDim2.new(0.5, -190, 0.5, -280)
+frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+frame.BackgroundTransparency = 0.6
+frame.BorderSizePixel = 3
+frame.BorderColor3 = Color3.fromRGB(0, 255, 255)
+frame.Active = true
+frame.Draggable = true
+frame.Visible = true
+frame.Parent = gui
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -20, 0, 50)
+title.Position = UDim2.new(0, 10, 0, 10)
+title.BackgroundTransparency = 1
+title.Text = "CRAZYHUB"
+title.TextColor3 = Color3.fromRGB(0, 255, 255)
+title.Font = Enum.Font.Arcade
+title.TextSize = 48
+title.TextStrokeTransparency = 1
+title.Parent = frame
+
+local content = Instance.new("Frame")
+content.Size = UDim2.new(0.9, 0, 0.78, 0)
+content.Position = UDim2.new(0.05, 0, 0.18, 0)
+content.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+content.BackgroundTransparency = 0.5
+content.BorderSizePixel = 2
+content.BorderColor3 = Color3.fromRGB(0, 255, 255)
+content.Parent = frame
+local corner = Instance.new("UICorner", content)
+corner.CornerRadius = UDim.new(0, 12)
+
+local inner = Instance.new("Frame")
+inner.Size = UDim2.new(1, -16, 1, -16)
+inner.Position = UDim2.new(0, 8, 0, 8)
+inner.BackgroundTransparency = 1
+inner.Parent = content
+
+
+local function createToggle(y, text, var)
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(0.7, 0, 0, 34)
+    label.Position = UDim2.new(0.05, 0, 0, y)
+    label.BackgroundTransparency = 1
+    label.Text = text
+    label.TextColor3 = Color3.new(1, 1, 1)
+    label.Font = Enum.Font.Arcade
+    label.TextSize = 28
+    label.TextStrokeTransparency = 1
+    label.Parent = inner
+
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0, 68, 0, 36)
+    btn.Position = UDim2.new(0.73, 0, 0, y - 2)
+    btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    btn.BackgroundTransparency = 0.3
+    btn.Text = ""
+    btn.BorderSizePixel = 2
+    btn.BorderColor3 = Color3.fromRGB(0, 255, 255)
+    btn.AutoButtonColor = false
+    btn.Parent = inner
+    local btnCorner = Instance.new("UICorner", btn)
+    btnCorner.CornerRadius = UDim.new(0, 16)
+
+    local knob = Instance.new("Frame")
+    knob.Size = UDim2.new(0, 30, 0, 30)
+    knob.Position = UDim2.new(0, 4, 0, 3)
+    knob.BackgroundColor3 = Color3.new(1, 1, 1)
+    knob.Parent = btn
+    local knobCorner = Instance.new("UICorner", knob)
+    knobCorner.CornerRadius = UDim.new(1, 0)
+
+    btn.MouseButton1Click:Connect(function()
+        _G[var] = not _G[var]
+        TweenService:Create(knob, TweenInfo.new(0.2), {Position = _G[var] and UDim2.new(1, -34, 0, 3) or UDim2.new(0, 4, 0, 3)}):Play()
+        TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = _G[var] and Color3.fromRGB(0, 255, 200) or Color3.fromRGB(40, 40, 40)}):Play()
+    end)
+end
+
+
+_G.autoFarmEnabled = false
+_G.autoResetEnabled = false
+_G.xray = false
+_G.antiafk = true
+_G.norender = false
+_G.speedhack = false
+
+createToggle(15,  "Autofarm",      "autoFarmEnabled")
+createToggle(65,  "Auto Reset",    "autoResetEnabled")
+createToggle(115, "Role ESP",      "xray")
+createToggle(165, "Anti-AFK",      "antiafk")
+createToggle(215, "Disable Render","norender")
+createToggle(265, "Speed Hack",    "speedhack")
+
+
+local xbtn = Instance.new("TextButton")
+xbtn.Size = UDim2.new(0, 46, 0, 46)
+xbtn.Position = UDim2.new(1, -56, 0, 10)
+xbtn.BackgroundColor3 = Color3.fromRGB(255, 0, 50)
+xbtn.BackgroundTransparency = 0.2
+xbtn.Text = "X"
+xbtn.TextColor3 = Color3.new(1, 1, 1)
+xbtn.Font = Enum.Font.Arcade
+xbtn.TextSize = 32
+xbtn.TextStrokeTransparency = 1
+xbtn.AutoButtonColor = false
+xbtn.Parent = frame
+local xcorner = Instance.new("UICorner", xbtn)
+xcorner.CornerRadius = UDim.new(1, 0)
+xbtn.MouseButton1Click:Connect(function()
+    gui:Destroy()
+end)
+
+
+local espFolder = Instance.new("Folder")
+espFolder.Name = "CrazyHubESP"
+espFolder.Parent = workspace
+
+
+local function updateESP()
+    if not _G.xray then
+        espFolder:ClearAllChildren()
+        return
+    end
+    pcall(function()
+        espFolder:ClearAllChildren()
+        for _, plr in Players:GetPlayers() do
+            if plr == player or not plr.Character then continue end
+            local char = plr.Character
+            local root = char:FindFirstChild("HumanoidRootPart")
+            local head = char:FindFirstChild("Head")
+            if not root or not head then continue end
+            local role = "Innocent"
+            local color = Color3.fromRGB(0,255,0)
+            if char:FindFirstChild("Knife") then role="Murderer" color=Color3.fromRGB(255,0,0)
+            elseif char:FindFirstChild("Gun") then role="Sheriff" color=Color3.fromRGB(0,100,255) end
+            local box = Instance.new("BoxHandleAdornment")
+            box.Size = Vector3.new(3.5,5.5,3.5)
+            box.Color3 = color
+            box.Transparency = 0.3
+            box.AlwaysOnTop = true
+            box.Adornee = root
+            box.Parent = espFolder
+            local tag = Instance.new("BillboardGui")
+            tag.Size = UDim2.new(0,100,0,50)
+            tag.Adornee = head
+            tag.AlwaysOnTop = true
+            tag.Parent = espFolder
+            local nameLabel = Instance.new("TextLabel", tag)
+            nameLabel.Size = UDim2.new(1,0,1,0)
+            nameLabel.BackgroundTransparency = 1
+            nameLabel.Text = plr.Name.."\n"..role
+            nameLabel.TextColor3 = color
+            nameLabel.Font = Enum.Font.Arcade
+            nameLabel.TextSize = 18
+        end
+        local gunDrop = workspace:FindFirstChild("GunDrop")
+        if gunDrop and gunDrop:IsA("BasePart") then
+            local gunBox = Instance.new("BoxHandleAdornment")
+            gunBox.Size = gunDrop.Size + Vector3.new(2,2,2)
+            gunBox.Color3 = Color3.fromRGB(255,255,0)
+            gunBox.Transparency = 0.4
+            gunBox.AlwaysOnTop = true
+            gunBox.Adornee = gunDrop
+            gunBox.Parent = espFolder
+            local gunTag = Instance.new("BillboardGui")
+            gunTag.Size = UDim2.new(0,100,0,40)
+            gunTag.Adornee = gunDrop
+            gunTag.AlwaysOnTop = true
+            gunTag.Parent = espFolder
+            local gunLabel = Instance.new("TextLabel", gunTag)
+            gunLabel.Size = UDim2.new(1,0,1,0)
+            gunLabel.BackgroundTransparency = 1
+            gunLabel.Text = "GUN"
+            gunLabel.TextColor3 = Color3.fromRGB(255,255,0)
+            gunLabel.Font = Enum.Font.Arcade
+            gunLabel.TextSize = 28
+        end
+    end)
+end
+spawn(function() while task.wait(0.7) do updateESP() end end)
+
+
+spawn(function()
+    while task.wait(0.1) do
+        pcall(function()
+            if player.Character and player.Character:FindFirstChild("Humanoid") then
+                player.Character.Humanoid.WalkSpeed = _G.speedhack and 100 or 16
+            end
+        end)
+    end
+end)
+
+
+player.Idled:Connect(function()
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton2(Vector2.new())
+end)
+
+
+spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            game:GetService("RunService"):Set3dRenderingEnabled(not _G.norender)
+        end)
+    end
+end)
+
+
+local CoinCollected = ReplicatedStorage.Remotes.Gameplay.CoinCollected
+local RoundStart = ReplicatedStorage.Remotes.Gameplay.RoundStart
+local RoundEnd = ReplicatedStorage.Remotes.Gameplay.RoundEndFade
+
+local farming = false
+local bag_full = false
+local resetting = false
+local start_position = nil
+
+local function getCharacter()
+    return player.Character or player.CharacterAdded:Wait()
+end
+
+local function getHRP()
+    return getCharacter():WaitForChild("HumanoidRootPart")
+end
+
+CoinCollected.OnClientEvent:Connect(function(_, current, max)
+    if current == max and not resetting and _G.autoResetEnabled then
+        resetting = true
+        bag_full = true
+        local hrp = getHRP()
+        if start_position then
+            local tween = TweenService:Create(hrp, TweenInfo.new(2, Enum.EasingStyle.Linear), {CFrame = start_position})
+            tween:Play()
+            tween.Completed:Wait()
+        end
+        task.wait(0.5)
+        player.Character.Humanoid.Health = 0
+        player.CharacterAdded:Wait()
+        task.wait(1.5)
+        resetting = false
+        bag_full = false
+    end
+end)
+
+RoundStart.OnClientEvent:Connect(function()
+    farming = true
+    start_position = getHRP().CFrame
+end)
+
+RoundEnd.OnClientEvent:Connect(function()
+    farming = false
+end)
+
+local function get_nearest_coin()
+    local hrp = getHRP()
+    local closest, dist = nil, math.huge
+    for _, m in pairs(workspace:GetChildren()) do
+        if m:FindFirstChild("CoinContainer") then
+            for _, coin in pairs(m.CoinContainer:GetChildren()) do
+                if coin:IsA("BasePart") and coin:FindFirstChild("TouchInterest") then
+                    local d = (hrp.Position - coin.Position).Magnitude
+                    if d < dist then
+                        closest, dist = coin, d
+                    end
+                end
+            end
+        end
+    end
+    return closest, dist
+end
+
+task.spawn(function()
+    while true do
+        if _G.autoFarmEnabled and farming and not bag_full then
+            local coin, dist = get_nearest_coin()
+            if coin then
+                local hrp = getHRP()
+                if dist > 150 then
+                    hrp.CFrame = coin.CFrame
+                else
+                    local tween = TweenService:Create(hrp, TweenInfo.new(dist / 20, Enum.EasingStyle.Linear), {CFrame = coin.CFrame})
+                    tween:Play()
+                    repeat task.wait() until not coin:FindFirstChild("TouchInterest") or not farming or not _G.autoFarmEnabled
+                    tween:Cancel()
+                end
+            end
+        end
+        task.wait(0.2)
+    end
+end)
+
+
+frame.Size = UDim2.new(0, 0, 0, 0)
+frame.Visible = true
+gui.Enabled = true
+
+local openTween = TweenService:Create(frame, TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+    Size = UDim2.new(0, 380, 0, 560)
+})
+openTween:Play()
